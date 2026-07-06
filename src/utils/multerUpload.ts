@@ -4,8 +4,10 @@ import fs from "fs";
 import AppError from "../ErrorHelper/AppError";
 import status from "http-status";
 
-// Ensure uploads directory exists
-const uploadDir = path.join(process.cwd(), "public", "uploads", "products");
+import os from "os";
+
+// Ensure uploads directory exists (use /tmp on Vercel)
+const uploadDir = path.join(os.tmpdir(), "products");
 if (!fs.existsSync(uploadDir)) {
   fs.mkdirSync(uploadDir, { recursive: true });
 }

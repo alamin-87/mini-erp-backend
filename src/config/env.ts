@@ -21,8 +21,8 @@ interface EnvConfig {
 }
 
 const envConfig = (): EnvConfig => {
+  // PORT is optional on Vercel (serverless has no port)
   const requiredVars = [
-    "PORT",
     "NODE_ENV",
     "MONGO_URI",
     "ADMIN_EMAIL",
@@ -47,7 +47,7 @@ const envConfig = (): EnvConfig => {
   });
 
   return {
-    PORT: process.env.PORT!,
+    PORT: process.env.PORT || "5000",
     NODE_ENV: process.env.NODE_ENV!,
     MONGO_URI: process.env.MONGO_URI!,
     ADMIN_EMAIL: process.env.ADMIN_EMAIL!,
