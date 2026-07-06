@@ -76,12 +76,8 @@ export class QueryBuilder<T> {
   }
 
   public sort(): this {
-    const sortBy = this.query.sortBy?.toString();
+    const sortBy = this.query.sortBy?.toString() || "createdAt";
     const sortOrder = this.query.sortOrder === "asc" ? 1 : -1;
-
-    if (!sortBy) {
-      return this;
-    }
 
     this.modelQuery = this.modelQuery.sort({ [sortBy]: sortOrder });
     return this;
