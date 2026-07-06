@@ -1,0 +1,37 @@
+import { Router } from "express";
+import { SaleController } from "./sale.controller";
+import auth from "../../middlewares/checkAuth";
+import authorize from "../../middlewares/authorize";
+import { UserRole } from "../../types/userType";
+import { Permission } from "../../types/permissions";
+import { validateRequest } from "../../middlewares/ValidetRequest";
+import { createSaleValidation } from "./sale.validation";
+
+const router = Router();
+
+// Create sale - Admin, Manager, Employee can all create sales
+router.post(
+  "/",
+  auth(UserRole.ADMIN, UserRole.MANAGER, UserRole.EMPLOYEE),
+  authorize(Permission.CREATE_SALES),
+  validateRequest(createSaleValidation),
+  SaleController.createSale
+);
+
+// Get all sales - Admin, Manager
+router.get(
+  "/",
+  auth(UserRole.ADMIN, UserRole.MANAGER),
+  authorize(Permission.VIEW_SALES),
+  SaleController.getAllSales
+);
+
+// Get sale by ID - Admin, Manager
+router.get(
+  "/:id",
+  auth(UserRole.ADMIN, UserRole.MANAGER),
+  authorize(Permission.VIEW_SALES),
+  SaleController.getSaleById
+);
+
+export const SaleRoute = router;
