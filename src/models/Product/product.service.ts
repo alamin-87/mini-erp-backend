@@ -73,7 +73,6 @@ const updateProduct = async (
     throw new AppError(status.NOT_FOUND, "Product not found");
   }
 
-  // If new image uploaded, replace the previous Cloudinary asset
   if (file) {
     if (product.imagePublicId) {
       await deleteFileFromCloudinary(product.imagePublicId);
@@ -111,8 +110,6 @@ const deleteProduct = async (id: string) => {
   if (product.imagePublicId) {
     await deleteFileFromCloudinary(product.imagePublicId);
   }
-
-  // Soft delete
   product.isDeleted = true;
   await product.save();
 

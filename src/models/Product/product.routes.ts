@@ -12,9 +12,6 @@ import {
 } from "./product.validation";
 
 const router = Router();
-
-// All product routes require authentication
-// GET - All authenticated users can view
 router.get(
   "/",
   auth(UserRole.ADMIN, UserRole.MANAGER, UserRole.EMPLOYEE),
@@ -28,8 +25,6 @@ router.get(
   authorize(Permission.VIEW_PRODUCTS),
   ProductController.getProductById
 );
-
-// POST/PUT/DELETE - Only Admin and Manager
 router.post(
   "/",
   auth(UserRole.ADMIN, UserRole.MANAGER),

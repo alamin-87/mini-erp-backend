@@ -71,5 +71,4 @@ process.on("unhandledRejection", (error) => {
 
 main();
 
-// Export for Vercel serverless deployment
 export default app;

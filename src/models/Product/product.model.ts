@@ -73,7 +73,6 @@ const productSchema = new Schema<IProduct>(
   }
 );
 
-// Exclude soft-deleted products by default
 productSchema.pre("find", function () {
   this.where({ isDeleted: { $ne: true } });
 });

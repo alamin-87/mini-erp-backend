@@ -5,8 +5,6 @@ import AppError from "../ErrorHelper/AppError";
 import status from "http-status";
 
 import os from "os";
-
-// Ensure uploads directory exists (use /tmp on Vercel)
 const uploadDir = path.join(os.tmpdir(), "products");
 if (!fs.existsSync(uploadDir)) {
   fs.mkdirSync(uploadDir, { recursive: true });
@@ -39,5 +37,5 @@ const fileFilter = (
 export const uploadProductImage = multer({
   storage,
   fileFilter,
-  limits: { fileSize: 5 * 1024 * 1024 }, // 5MB max
+  limits: { fileSize: 5 * 1024 * 1024 },
 });

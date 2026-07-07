@@ -1,7 +1,7 @@
 export interface TErrorSources {
-  path?: string; // optional now
+  path?: string;
   message: string;
-  value?: unknown; // optional invalid value
+  value?: unknown;
 }
 
 export interface TErrorResponse {

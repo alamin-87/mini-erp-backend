@@ -32,7 +32,7 @@ const updateUser = catchAsync(async (req: any, res) => {
   const result = await UserService.updateUser(
     req.user.userId,
     req.body,
-    req.files?.profilePhoto?.[0] // 👈 file comes from multer .fields()
+    req.files?.profilePhoto?.[0]
   );
 
   sendResponse(res, {

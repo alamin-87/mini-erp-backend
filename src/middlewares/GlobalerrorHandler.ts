@@ -12,21 +12,17 @@ export const globalErrorHandler: ErrorRequestHandler = (err, _req, res, _next) =
   let errorSources: TErrorSources[] = [
     { path: "", message: "Something went wrong!" },
   ];
-
-  // Zod Validation Error
   if (err instanceof ZodError) {
     const zodError = handleZodError(err);
     statusCode = zodError.statusCode || 400;
     message = zodError.message;
     errorSources = zodError.errorSources;
   }
-  // Custom AppError
   else if (err instanceof AppError) {
     statusCode = err.statusCode;
     message = err.message;
     errorSources = [{ path: "", message: err.message }];
   }
-  // Mongoose Validation Error
   else if (err instanceof mongoose.Error.ValidationError) {
     statusCode = 400;
     message = "Validation Error";
@@ -35,20 +31,19 @@ export const globalErrorHandler: ErrorRequestHandler = (err, _req, res, _next) =
       message: val.message,
     }));
   }
-  // Mongoose Cast Error (invalid ObjectId)
   else if (err instanceof mongoose.Error.CastError) {
     statusCode = 400;
     message = "Invalid ID";
     errorSources = [{ path: err.path, message: `Invalid value: ${err.value}` }];
   }
-  // Mongoose Duplicate Key Error
+
   else if (err.code === 11000) {
     statusCode = 409;
     const field = Object.keys(err.keyValue || {})[0];
     message = `Duplicate value for field: ${field}`;
     errorSources = [{ path: field || "", message }];
   }
-  // Generic Error
+
   else if (err instanceof Error) {
     message = err.message;
     errorSources = [{ path: "", message: err.message }];

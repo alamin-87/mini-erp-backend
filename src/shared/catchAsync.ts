@@ -1,9 +1,5 @@
 import type { NextFunction, Request, Response, RequestHandler } from "express";
 
-/**
- * catchAsync - Wraps async route handlers to automatically forward errors
- * @param fn - Async Express route handler
- */
 const catchAsync = <
   ReqBody = any,
   ResBody = any,
@@ -18,10 +14,7 @@ const catchAsync = <
 ): RequestHandler<ReqQuery, ResBody, ReqBody, any, Locals> => {
   return (req, res, next) => {
     fn(req, res, next).catch((error) => {
-      // Optional: Log the error for debugging
       console.error("Async route error:", error);
-
-      // Ensure it's an Error object
       if (!(error instanceof Error)) {
         error = new Error(typeof error === "string" ? error : "Unknown error");
       }

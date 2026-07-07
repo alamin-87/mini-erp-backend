@@ -28,7 +28,7 @@ const userSchema = new Schema<IUser>(
     password: {
       type: String,
       required: [true, "Password is required"],
-      select: false, // exclude password by default
+      select: false,
     },
     role: {
       type: String,
@@ -52,7 +52,6 @@ const userSchema = new Schema<IUser>(
   }
 );
 
-// Exclude soft-deleted users by default
 userSchema.pre("find", function () {
   this.where({ isDeleted: { $ne: true } });
 });

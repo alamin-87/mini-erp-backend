@@ -22,7 +22,6 @@ const createSale = async (payload: ISaleInput, userId: string) => {
     let grandTotal = 0;
 
     for (const item of payload.items) {
-      // Find the product
       const product = await Product.findById(item.product).session(session);
 
       if (!product) {
@@ -38,16 +37,12 @@ const createSale = async (payload: ISaleInput, userId: string) => {
           `Product "${product.productName}" is no longer available`
         );
       }
-
-      // Check stock availability
       if (product.stockQuantity < item.quantity) {
         throw new AppError(
           status.BAD_REQUEST,
           `Insufficient stock for "${product.productName}". Available: ${product.stockQuantity}, Requested: ${item.quantity}`
         );
       }
-
-      // Calculate item total
       const totalPrice = product.sellingPrice * item.quantity;
       grandTotal += totalPrice;
 
@@ -58,13 +53,9 @@ const createSale = async (payload: ISaleInput, userId: string) => {
         unitPrice: product.sellingPrice,
         totalPrice,
       });
-
-      // Reduce stock
       product.stockQuantity -= item.quantity;
       await product.save({ session });
     }
-
-    // Create the sale
     const [sale] = await Sale.create(
       [
         {
@@ -75,10 +66,7 @@ const createSale = async (payload: ISaleInput, userId: string) => {
       ],
       { session }
     );
-
     await session.commitTransaction();
-
-    // Populate the sale with product details
     const populatedSale = await Sale.findById(sale._id)
       .populate("items.product", "productName sku category")
       .populate("soldBy", "name email");
